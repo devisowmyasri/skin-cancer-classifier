@@ -16,7 +16,12 @@ app = FastAPI(title="Skin Cancer Classification API")
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, replace with Vercel URL
+    allow_origins=[
+        "https://skin-cancer-classifier-ycxk.vercel.app",
+        "https://skin-cancer-classifier-7uzh.onrender.com",
+        "http://localhost:5173",
+        "*"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
