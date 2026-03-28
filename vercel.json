@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/dist",
+  "framework": "vite",
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "https://skin-cancer-classifier-7uzh.onrender.com/api/$1" },
+    { "source": "/static/(.*)", "destination": "https://skin-cancer-classifier-7uzh.onrender.com/static/$1" },
+    { "source": "/(.*)", "destination": "/frontend/dist/index.html" }
+  ]
+}
