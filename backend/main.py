@@ -27,13 +27,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Create static directory for uploaded images (temp)
-UPLOAD_DIR = "backend/static/uploads"
+# Use absolute paths for Render stability
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_DIR = os.path.join(BASE_DIR, "static", "uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
-app.mount("/static", StaticFiles(directory="backend/static"), name="static")
+
+# Mount static files correctly
+app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
 
 # Load model (placeholder weights or re-init)
-MODEL_PATH = "backend/ml/weights/model.h5"
+MODEL_PATH = os.path.join(BASE_DIR, "ml", "weights", "model.h5")
 model = build_model()
 if os.path.exists(MODEL_PATH):
     model.load_weights(MODEL_PATH)
