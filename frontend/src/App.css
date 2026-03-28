@@ -1,0 +1,121 @@
+/* Global Layout */
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #0f172a;
+  color: #ffffff;
+}
+
+/* Main Center Container */
+#center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 30px;
+}
+
+/* Title */
+h1 {
+  font-size: 42px;
+  font-weight: 600;
+  text-align: center;
+  color: #38bdf8;
+}
+
+/* Upload Box */
+.upload-box {
+  border: 2px dashed #38bdf8;
+  padding: 40px;
+  border-radius: 12px;
+  text-align: center;
+  background: #1e293b;
+  width: 350px;
+  transition: 0.3s;
+}
+
+.upload-box:hover {
+  border-color: #0ea5e9;
+  background: #0f172a;
+}
+
+/* Upload Button */
+.upload-btn {
+  background: #38bdf8;
+  border: none;
+  padding: 12px 22px;
+  font-size: 16px;
+  color: black;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.upload-btn:hover {
+  background: #0ea5e9;
+  transform: scale(1.05);
+}
+
+/* Predict Button */
+.predict-btn {
+  background: #22c55e;
+  border: none;
+  padding: 12px 25px;
+  font-size: 16px;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.predict-btn:hover {
+  background: #16a34a;
+  transform: scale(1.05);
+}
+
+/* Result Card */
+.result-card {
+  margin-top: 20px;
+  background: #1e293b;
+  padding: 20px 30px;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid #334155;
+}
+
+.result-card h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+/* Benign Result */
+.benign {
+  color: #22c55e;
+}
+
+/* Malignant Result */
+.malignant {
+  color: #ef4444;
+}
+
+/* Image Preview */
+.preview-img {
+  width: 250px;
+  border-radius: 10px;
+  margin-top: 20px;
+  border: 2px solid #38bdf8;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .upload-box {
+    width: 90%;
+  }
+
+  h1 {
+    font-size: 32px;
+  }
+}

@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+venv/
+.env
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Build outputs
+frontend/dist/
+backend/static/uploads/*
+!backend/static/uploads/.gitkeep
+
+# Heavy Model Weights
+backend/ml/weights/*.h5
+backend/ml/weights/*.tflite
+
+# Editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
