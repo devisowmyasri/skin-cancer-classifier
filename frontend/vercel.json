@@ -1,7 +1,7 @@
 {
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "https://skin-cancer-api.onrender.com/api/$1" },
-    { "source": "/static/(.*)", "destination": "https://skin-cancer-api.onrender.com/static/$1" },
+    { "source": "/api/(.*)", "destination": "https://skin-cancer-classifier-7uzh.onrender.com/api/$1" },
+    { "source": "/static/(.*)", "destination": "https://skin-cancer-classifier-7uzh.onrender.com/static/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

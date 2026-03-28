@@ -8,7 +8,7 @@ export interface PredictionResult {
   is_simulated?: boolean;
 }
 
-const API_BASE = 'http://localhost:8000'; // Default for local dev
+const API_BASE = 'https://skin-cancer-classifier-7uzh.onrender.com'; // Live Render API
 
 export async function predictImage(file: File): Promise<PredictionResult> {
   const formData = new FormData();
