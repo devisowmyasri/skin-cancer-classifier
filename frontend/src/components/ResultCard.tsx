@@ -1,4 +1,4 @@
-import { TriangleAlert, CircleCheck, Info, Activity } from 'lucide-react';
+import { TriangleAlert, Info, Activity } from 'lucide-react';
 import { DiagnosticChart } from './DiagnosticChart';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -81,7 +81,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result }) => {
             <span className="w-4 h-px bg-amber-500"></span>
             Spectral Analysis Graph
           </h4>
-          <DiagnosticChart data={result.all_confidences} />
+          <DiagnosticChart data={result.all_confidences} isMalignant={isMalignant} />
         </div>
 
         {/* DATA TABLE PANEL */}

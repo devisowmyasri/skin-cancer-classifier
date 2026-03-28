@@ -3,7 +3,7 @@ import { UploadZone } from './components/UploadZone';
 import { ResultCard } from './components/ResultCard';
 import { HistoryTable } from './components/HistoryTable';
 import { predictImage, type PredictionResult } from './api/predict';
-import { Shield, Brain, Activity, LoaderCircle, Search, Fingerprint, Terminal } from 'lucide-react';
+import { Shield, Brain, LoaderCircle, Search, Fingerprint, Terminal } from 'lucide-react';
 
 function App() {
   const [loading, setLoading] = useState(false);
