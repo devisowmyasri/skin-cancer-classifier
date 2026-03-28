@@ -36,6 +36,15 @@ if os.path.exists(MODEL_PATH):
 else:
     print("Warning: Model weights not found. Prediction results will be random.")
 
+@app.get("/")
+async def root():
+    return {
+        "status": "operational",
+        "service": "Obsidian skin-cancer-classifier API",
+        "version": "4.0.1",
+        "docs": "/docs"
+    }
+
 @app.get("/api/health")
 async def health_check():
     return {"status": "healthy", "weights_loaded": os.path.exists(MODEL_PATH)}
