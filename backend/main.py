@@ -8,8 +8,8 @@ import uuid
 import base64
 import numpy as np
 import cv2
-from ml.preprocess import preprocess_image
-from ml.model_utils import build_model, get_gradcam_heatmap, apply_heatmap, CLASSES
+from backend.ml.preprocess import preprocess_image
+from backend.ml.model_utils import build_model, get_gradcam_heatmap, apply_heatmap, CLASSES
 
 app = FastAPI(title="Skin Cancer Classification API")
 
