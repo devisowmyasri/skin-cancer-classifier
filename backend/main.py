@@ -27,22 +27,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Use absolute paths for Render stability
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-UPLOAD_DIR = os.path.join(BASE_DIR, "static", "uploads")
+# Create static directory for uploaded images (temp)
+UPLOAD_DIR = "backend/static/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
-
-# Mount static files correctly
-app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
+app.mount("/static", StaticFiles(directory="backend/static"), name="static")
 
 # Load model (placeholder weights or re-init)
-MODEL_PATH = os.path.join(BASE_DIR, "ml", "weights", "model.h5")
-model = build_model()
+MODEL_PATH = "backend/ml/weights/model.h5"
+model = None
+
+# We only build the heavy model if the actual weights exist to save RAM on Render Free Tier
 if os.path.exists(MODEL_PATH):
+    model = build_model()
     model.load_weights(MODEL_PATH)
     print(f"Loaded weights from {MODEL_PATH}")
 else:
-    print("Warning: Model weights not found. Prediction results will be random.")
+    print("Warning: Model weights not found. Running in Lightweight Simulation Mode (no heavy model loaded).")
 
 @app.get("/")
 async def root():
@@ -71,22 +71,15 @@ async def predict_image(file: UploadFile = File(...)):
         shutil.copyfileobj(file.file, buffer)
 
     try:
-        # Preprocess (Required for both Simulation/Heatmap and Live AI)
-        img_array = preprocess_image(temp_path)
-        
         # CHECK FOR LOADED WEIGHTS OR FALLBACK TO SIMULATION
         is_simulated = not os.path.exists(MODEL_PATH)
         
         if is_simulated:
             # SIMULATION MODE: Realistic but randomized for testing
-            # Randomly pick a top class
             class_idx = np.random.randint(0, len(CLASSES))
             predicted_class = CLASSES[class_idx]
-            
-            # Generate a realistic 'Winner' confidence (75% - 98%)
             confidence = np.random.uniform(0.75, 0.98)
             
-            # Generate other confidences to sum to 1.0
             remaining = 1.0 - confidence
             other_vals = np.random.dirichlet(np.ones(len(CLASSES)-1)) * remaining
             confidences = {}
@@ -97,25 +90,32 @@ async def predict_image(file: UploadFile = File(...)):
                 else:
                     confidences[cls] = float(other_vals[other_idx])
                     other_idx += 1
+            
+            # MOCK HEATMAP: Just return the original image for simulation to save memory
+            heatmap_base64 = ""
+            with open(temp_path, "rb") as image_file:
+                heatmap_base64 = base64.b64encode(image_file.read()).decode('utf-8')
+            
+            verdict = "Malignant" if predicted_class in ['mel', 'bcc', 'akiec'] else "Benign"
+
         else:
-            # LIVE AI PREDICTION
+            # LIVE AI PREDICTION (Assuming weights were loaded)
+            img_array = preprocess_image(temp_path)
             preds = model.predict(img_array)
             class_idx = np.argmax(preds[0])
             predicted_class = CLASSES[class_idx]
             confidence = float(preds[0][class_idx])
+            
             confidences = {CLASSES[i]: float(preds[0][i]) for i in range(len(CLASSES))}
-
-        # Grad-CAM Heatmap (Still works even with random weights for visualization)
-        heatmap = get_gradcam_heatmap(model, img_array)
-        superimposed_img = apply_heatmap(temp_path, heatmap)
-        
-        # Convert superimposed image to base64
-        _, buffer = cv2.imencode(".png", superimposed_img)
-        heatmap_base64 = base64.b64encode(buffer).decode("utf-8")
-
-        # Determine benign/malignant
-        malignant_classes = ['mel', 'bcc', 'akiec']
-        verdict = "Malignant" if predicted_class in malignant_classes else "Benign"
+            
+            # Grad-CAM Heatmap
+            heatmap = get_gradcam_heatmap(model, img_array)
+            superimposed_img = apply_heatmap(temp_path, heatmap)
+            _, buffer = cv2.imencode(".png", superimposed_img)
+            heatmap_base64 = base64.b64encode(buffer).decode("utf-8")
+            
+            malignant_classes = ['mel', 'bcc', 'akiec']
+            verdict = "Malignant" if predicted_class in malignant_classes else "Benign"
 
         return {
             "predicted_class": predicted_class,
